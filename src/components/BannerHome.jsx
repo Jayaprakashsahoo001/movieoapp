@@ -39,7 +39,7 @@ function BannerHome() {
       <div className='flex min-h-full max-h-[95vh] overflow-hidden'>
         {
           bannerData.map((data, index) => {
-           
+
 
             return (
               <div key={data.id + "bannerHome" + index} className='min-w-full min-h-[450px] lg:min-h-full overflow-hidden relative group transition-all' style={{ transform: `translateX(-${CurrentImage * 100}%)` }}>
@@ -73,9 +73,9 @@ function BannerHome() {
                       <span>|</span>
                       <p>Viwes : {data.id}</p>
                     </div>
-                    <button className='bg-white px-4 py-2 text-black font-bold rounded my-5 hover:bg-gradient-to-l from-red-700 to-orange-500 shadow-md transition-all hover:scale-105'>
+                    <Link to={"/" + data?.media_type + "/" + data?.id} className='bg-white px-4 py-2 text-black font-bold rounded my-5 hover:bg-gradient-to-l from-red-700 to-orange-500 shadow-md transition-all hover:scale-105'>
                       Play Now
-                    </button>
+                    </Link>
 
                   </div>
                 </div>
