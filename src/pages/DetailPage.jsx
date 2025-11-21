@@ -14,7 +14,7 @@ function DetailPage() {
   const { data } = useFetchDetails(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
   const { data: castData } = useFetchDetails(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/credits?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
   const { data: similarData } = useFetch(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/similar?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
-  const { data: RecommendationData} = useFetch(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/recommendations?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
+  const { data: RecommendationData } = useFetch(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/recommendations?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
 
 
   console.log("data", data);
@@ -22,6 +22,9 @@ function DetailPage() {
 
 
   const duration = (data?.runtime / 60 || data?.number_of_episodes / 60)?.toFixed(1)?.split(".")
+  const genreString = data?.genres?.map(g => g.name)?.join(", ");
+
+
 
 
   return (
@@ -79,8 +82,9 @@ function DetailPage() {
           </div>
 
           <div>
+            <p className='text-white'>Genre : {genreString}</p>
+            <Divider />
             <p><span className='text-white' >Language</span> : {data?.original_language}</p>
-
           </div>
 
           <Divider />
@@ -110,7 +114,7 @@ function DetailPage() {
       <div>
         <HorizontalScrollCard data={similarData} heading={"Similar " + params?.explore} media_type={params?.explore} />
         <HorizontalScrollCard data={RecommendationData} heading={"Recommendation " + params?.explore} media_type={params?.explore} />
-            
+
       </div>
 
     </div>
