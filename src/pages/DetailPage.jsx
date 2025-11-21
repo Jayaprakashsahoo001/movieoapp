@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import useFetch from '../hooks/useFetch'
 import useFetchDetails from '../hooks/useFetchDetails'
@@ -6,6 +6,9 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import Divider from '../components/Divider'
 import HorizontalScrollCard from '../components/HorizontalScrollCard'
+import VideoPlay from '../components/VideoPlay'
+
+
 
 function DetailPage() {
 
@@ -15,16 +18,21 @@ function DetailPage() {
   const { data: castData } = useFetchDetails(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/credits?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
   const { data: similarData } = useFetch(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/similar?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
   const { data: RecommendationData } = useFetch(`https://api.themoviedb.org/3/${params?.explore}/${params?.id}/recommendations?api_key=9d2df73bb12e1429b9a048dc7e43c1fc`)
+  const [playVideo, setPlayVideo] = useState(false)
+  const [playVideoId, setPlayVideoId] = useState("")
 
 
   console.log("data", data);
   console.log("star cast", castData);
 
+  const handlePlayVideo = (data) =>{
+    setPlayVideoId(data)
+    setPlayVideo(true)
+  }
+
 
   const duration = (data?.runtime / 60 || data?.number_of_episodes / 60)?.toFixed(1)?.split(".")
   const genreString = data?.genres?.map(g => g.name)?.join(", ");
-
-
 
 
   return (
@@ -43,8 +51,9 @@ function DetailPage() {
         <div className=' relative mx-auto lg:-mt-28 lg:mx-0 w-fit min-w-60'>
           <img
             src={imageURL + data?.poster_path}
-            className='h-80 w-65 object-cover rounded'
+            className='h-80 w-60 object-cover rounded'
           />
+          <button onClick={() => handlePlayVideo(data)} className='mt-3 w-full py-2 px-4 text-center bg-white text-black rounded font-bold text-lg hover:bg-gradient-to-l from-red-500 to-orange-500 hover:scale-105 transition-all'>Play Now</button>
         </div>
 
         <div className='relative w-full h-full '>
@@ -89,7 +98,7 @@ function DetailPage() {
 
           <Divider />
           <h2 className='font-bold text-lg mb-2'>Cast :</h2>
-          <div className='grid grid-cols-[repeat(auto-fit,96px)] gap-5 mx-2.5 lg:mx-0'>
+          <div className='grid grid-cols-[repeat(auto-fit,96px)] gap-5 mx-10 lg:mx-0 '>
             {
               castData?.cast?.filter(el => el?.profile_path)?.map((cast, index) => {
                 return (
@@ -116,6 +125,14 @@ function DetailPage() {
         <HorizontalScrollCard data={RecommendationData} heading={"Recommendation " + params?.explore} media_type={params?.explore} />
 
       </div>
+
+      {
+        playVideo && (
+          <VideoPlay data={playVideoId} close={() => setPlayVideo(false)} media_type={params?.explore}/>
+        )
+      }
+
+
 
     </div>
   )
